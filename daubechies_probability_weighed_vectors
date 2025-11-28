@@ -36,7 +36,7 @@ c_3 = np.float64(c_3)
 
 if known_amplitudes == 0:
   print("Standard solution. This one's free chump!")
-  c_0 = ((np.float64(1.0) - np.sqrt(np.float64(3.0)))/(np.float64(4.0)* np.sqrt(np.float64(2.0))))
+  c_0 = (np.float64(1.0) - np.sqrt(np.float64(3.0)))/(np.float64(4.0)* np.sqrt(np.float64(2.0)))
   c_1 = (np.float64(3.0) - np.sqrt(np.float64(3.0)))/(np.float(4.0)* np.sqrt(np.float64(2.0)))
   c_2 = (np.float64(3.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)* np.sqrt(np.float64(2.0)))
   c_3 = (np.float64(1.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)*(np.sqrt(np.float64(2.0))))
