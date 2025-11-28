@@ -1,0 +1,70 @@
+import numpy as np
+from scipy import stats as stat
+import pywt
+
+#this function returns the probability under normal curve as a weighed vector of the daubechies wave filter coefficients
+def db4errorvector(wavepacket,probability):
+  z_score = stat.norm.ppf(probability,loc = 0, scale = 1)
+  scalar = (np.float64(1.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)*(np.sqrt(np.float64(2.0)))) / z_score
+  unscaledvector = pywt.dwt(data = wavepacket,wavelet = 'db4')
+  w = pywt.Wavelet('db4')
+  print(w)
+  scaledvector = np.array(unscaledvector)
+  scaledvector = scalar * scaledvector
+
+  return scalar, scaledvector
+
+signal = [0,0.5,0.9,0.11,0,0,0.03,0.2,0.1] #sample signal vector
+p = 0.41 #sample probability
+scalar,vector = db4errorvector(signal,p)
+print(str(scalar))
+print(str(vector))
+
+#if you have a daubechies variable, this will reconstruct the other filter coefficients.
+c_0 = 0
+c_1 = 0
+c_2 = 0.0
+c_3 = (np.float64(1.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)*(np.sqrt(np.float64(2.0))))
+#occupy in reverse order
+
+known_amplitudes = 1 #how many coefficients do you already know the answer to.
+
+c_0 = np.float64(c_0)
+c_1 = np.float64(c_1)
+c_2 = np.float64(c_2)
+c_3 = np.float64(c_3)
+
+if known_amplitudes == 0:
+  print("Standard solution. This one's free chump!")
+  c_0 = (1.0 + 3.0**(1/2))/(4.0*(2.0**(1/2)))
+  c_1 = (3.0 + 3.0**(1/2))/(4.0*(2.0**(1/2)))
+  c_2 = (3.0 - 3.0**(1/2))/(4.0*(2.0**(1/2)))
+  c_3 = (np.float64(1.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)*(np.sqrt(np.float64(2.0))))
+  finalkey = np.array([c_0, c_1, c_2, c_3])
+  print(str(finalkey))
+
+if known_amplitudes == 3:
+  if c_0 == np.float64(0.0):
+    answer = np.float64(-1.0)* c_1 * c_3 /(c_2)
+    finalkey = np.array([answer, c_1, c_2, c_3])
+    print(str(finalkey))
+
+if known_amplitudes == 2:
+  c_1 = 2.0 * c_2 - 3.0 * c_3
+  c_0 = c_1 - c_2 - c_3
+  finalkey = np.array([c_0, c_1, c_2, c_3])
+
+if known_amplitudes == 1:
+  c_3 = c_3
+  c_2 = np.sqrt(np.float64(3.0)) * c_3
+  c_1 = (np.float64(2.0) * np.sqrt(np.float64(3.0)) - np.float64(3.0)) * c_3
+  c_0 = c_1 - c_2 + c_3
+  N = np.sqrt(np.float64(1.0)/((c_0**2) + (c_1**2) + (c_2**2) + (c_3**2)))
+  c_0 = c_0 / N
+  c_1 = c_1 / N
+  c_2 = c_2 / N
+  c_3 = c_3 / N
+  finalkey = np.array([c_0, c_1, c_2, c_3])
+  print(finalkey)
+  check = finalkey[0] **2 + finalkey[3]**2 + finalkey[1]**2 + finalkey[2]**2
+  print(str(check) + ' should be =1')
