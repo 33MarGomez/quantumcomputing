@@ -36,9 +36,9 @@ c_3 = np.float64(c_3)
 
 if known_amplitudes == 0:
   print("Standard solution. This one's free chump!")
-  c_0 = (1.0 + 3.0**(1/2))/(4.0*(2.0**(1/2)))
-  c_1 = (3.0 + 3.0**(1/2))/(4.0*(2.0**(1/2)))
-  c_2 = (3.0 - 3.0**(1/2))/(4.0*(2.0**(1/2)))
+  c_0 = ((np.float64(1.0) - np.sqrt(np.float64(3.0)))/(np.float64(4.0)* np.sqrt(np.float64(2.0))))
+  c_1 = (np.float64(3.0) - np.sqrt(np.float64(3.0)))/(np.float(4.0)* np.sqrt(np.float64(2.0)))
+  c_2 = (np.float64(3.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)* np.sqrt(np.float64(2.0)))
   c_3 = (np.float64(1.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)*(np.sqrt(np.float64(2.0))))
   finalkey = np.array([c_0, c_1, c_2, c_3])
   print(str(finalkey))
@@ -50,7 +50,7 @@ if known_amplitudes == 3:
     print(str(finalkey))
 
 if known_amplitudes == 2:
-  c_1 = 2.0 * c_2 - 3.0 * c_3
+  c_1 = np.float64(2.0) * c_2 - np.float64(3.0) * c_3
   c_0 = c_1 - c_2 - c_3
   finalkey = np.array([c_0, c_1, c_2, c_3])
 
