@@ -7,8 +7,6 @@ def db4errorvector(wavepacket,probability):
   z_score = stat.norm.ppf(probability,loc = 0, scale = 1)
   scalar = (np.float64(1.0) + np.sqrt(np.float64(3.0)))/(np.float64(4.0)*(np.sqrt(np.float64(2.0)))) / z_score
   unscaledvector = pywt.dwt(data = wavepacket,wavelet = 'db4')
-  w = pywt.Wavelet('db4')
-  print(w)
   scaledvector = np.array(unscaledvector)
   scaledvector = scalar * scaledvector
 
@@ -20,7 +18,7 @@ scalar,vector = db4errorvector(signal,p)
 print(str(scalar))
 print(str(vector))
 
-#if you have a daubechies variable, this will reconstruct the other filter coefficients.
+#generates wavelet filter coefficients for db4 in fourier mapping
 c_0 = 0
 c_1 = 0
 c_2 = 0.0
