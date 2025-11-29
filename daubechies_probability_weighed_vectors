@@ -53,7 +53,6 @@ if known_amplitudes == 2:
   finalkey = np.array([c_0, c_1, c_2, c_3])
 
 if known_amplitudes == 1:
-  c_3 = c_3
   c_2 = np.sqrt(np.float64(3.0)) * c_3
   c_1 = (np.float64(2.0) * np.sqrt(np.float64(3.0)) - np.float64(3.0)) * c_3
   c_0 = c_1 - c_2 + c_3
