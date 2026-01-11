@@ -5,7 +5,7 @@ unitary = np.array([[0,-1j],[1j,0]])
 
 def arbitrary1qubit_Rot_from_U(unitary):
   """
-  Applies Rot gate after finding its arguments. Aids in development by giving a maximum-sized decomposition RzRYRz to a choice unitary
+  Applies Rot gate after finding its arguments. Aids in development by giving a maximum-sized decomposition RzRYRz to a choice unitary, use equivalent QubitUnitary function otherwise
   Make sure you rewrite the wires argument to work on the desired level as it has a placeholder value.
   u11 * u22 = cos**2(theta/2) meaning cos(theta) = cos**2(theta/2) - sin**2(theta/2)
   u21 * u22 = e**-2omega(i)/2 cos(theta/2)sin(theta/2)
