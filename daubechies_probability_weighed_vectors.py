@@ -72,7 +72,7 @@ def coefficientconstructor(c_3):
 
   (2*sqrt(3) -3)(1-sqrt(3) = 5 sqrt(3) - 15 NOT 3 + sqrt(3). It does work if you flip all the signs on the irrational, c_3 = 1 + sqrt(3) & c_1 = 3 - sqrt(3)
 
-  to prove one of the moments is wrong. Here is the corrected coefficient order, despite being cyclical, order does matter here.
+  The inverse fourier mirror is used, because =0 permits it. Here is the corrected coefficient order, despite being cyclical, order does matter here.
   This is just an efficient note-taking technique, this function essentially does nothing. The derivation works based on =0 not changing lin. comb.
   """
   #c_2 = c_0 * c_2 + c_1 * c_3 - c_2 * (c_0 - c_1 + c_2 - c_3) + c_2 * (-1.0 * c_1 + 2* c_2 - 3 * c_3) + c_3 * (-1.0 * c_1 + 2 * c_2 - 3 * c_3)
