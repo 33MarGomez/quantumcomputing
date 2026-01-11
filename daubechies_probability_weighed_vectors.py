@@ -75,7 +75,7 @@ def coefficientconstructor(c_3):
   to prove one of the moments is wrong. Here is the corrected coefficient order, despite being cyclical, order does matter here.
   This is just an efficient note-taking technique, this function essentially does nothing. The derivation works based on =0 not changing lin. comb.
   """
-  #c_2 = c_0 * c_2 + c_1 * c_3 - c_2 * (c_0 -1.0 * c_1 + c_2 - c_3) + c_2 * (-1.0 * c_1 + 2* c_2 - 3 * c_3) + c_3 * (-1.0 * c_1 + 2 * c_2 - 3 * c_3)
+  #c_2 = c_0 * c_2 + c_1 * c_3 - c_2 * (c_0 - c_1 + c_2 - c_3) + c_2 * (-1.0 * c_1 + 2* c_2 - 3 * c_3) + c_3 * (-1.0 * c_1 + 2 * c_2 - 3 * c_3)
   c_2 = np.sqrt(3.0)j * c_3
   c_1 = (2.0 * np.sqrt(3.0) - 3.0) * c_3
   c_0 = np.sqrt(1.0 - c_1**2 - c_2**2 - c_3**2)
