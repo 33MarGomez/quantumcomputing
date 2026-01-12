@@ -18,8 +18,8 @@ def db4fourierskimmer(signal,probability):
   """
   This takes the confidence of qft adherence off the top and leaves behind deviant behaviour.
   Add them back together for the original, fourier-amplified signal.
-  If d scales the fourth entry to the expected coefficient, and z is number of standard deviations causing the signal, and q is fourier conforming
-  dz*(signal)-q / (dz) = signal - (1/dz)*q
+  If d z is number of standard deviations causing the signal, and q is fourier conforming
+  z*(signal)-q / (z) = signal - (1/ z)*q
 
   variables:
   signal = signal vector
@@ -31,7 +31,6 @@ def db4fourierskimmer(signal,probability):
 
   """
   z_score = stat.norm.ppf(probability,loc = 0, scale = 1)
-  scalar =  (1.0 + np.sqrt(3.0))/(4.0*(np.sqrt(2.0))) / signal[3]
   element = np.array([[(1.0 - np.sqrt(3.0))/(4.0 * np.sqrt(2.0))],
                           [(3.0 - np.sqrt(3.0))/(4.0* np.sqrt(2.0))],
                           [(3.0 + np.sqrt(3.0))/(4.0* np.sqrt(2.0))],
@@ -60,7 +59,7 @@ def db4fourierskimmer(signal,probability):
   subtraction[-1,0] = element[1].item()
   subtraction[-2,-1] = element[1].item()
 
-  delta = signal -  np.matmul(subtraction,signal) * ((z_score*scalar)**(-1.0))
+  delta = signal -  np.matmul(subtraction,signal) * (z_score**(-1.0))
   flowpast = pywt.dwt(data = delta,wavelet = 'db4')
 
   return flowpast, delta
@@ -72,11 +71,11 @@ def coefficientconstructor(c_3):
 
   (2*sqrt(3) -3)(1-sqrt(3) = 5 sqrt(3) - 15 NOT 3 + sqrt(3). It does work if you flip all the signs on the irrational, c_3 = 1 + sqrt(3) & c_1 = 3 - sqrt(3)
 
-  The inverse fourier mirror is used, because =0 permits it. Here is the corrected coefficient order, despite being cyclical, order does matter here.
+  -1 was multiplied in for signal subtraction because =0 permits it. The change must be tracked for the purposes of deriving the coefficients but is otherwise fine.
   This is just an efficient note-taking technique, this function essentially does nothing. The derivation works based on =0 not changing lin. comb.
   """
   #c_2 = c_0 * c_2 + c_1 * c_3 - c_2 * (c_0 - c_1 + c_2 - c_3) + c_2 * (-1.0 * c_1 + 2* c_2 - 3 * c_3) + c_3 * (-1.0 * c_1 + 2 * c_2 - 3 * c_3)
-  c_2 = np.sqrt(3.0)j * c_3
+  c_2 = np.sqrt(3.0) * c_3
   c_1 = (2.0 * np.sqrt(3.0) - 3.0) * c_3
   c_0 = np.sqrt(1.0 - c_1**2 - c_2**2 - c_3**2)
   if c_0 - c_1 + c_2 - c_3 == 0:
