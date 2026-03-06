@@ -30,14 +30,6 @@ for i in indexes:
   if np.all(final == -1.0 * task_list[i,:]):
     print(strings[i_3] + ', ' + strings[i] + ', -1')
 
-dump = np.einsum('ij,kl->ijkl',identity,pauliy)
-row0 = np.asarray([dump[0,0,0],dump[0,1,0]]).flatten()
-row1 = np.asarray([dump[0,0,1],dump[0,1,1]]).flatten()
-row2 = np.asarray([dump[1,0,0],dump[1,1,0]]).flatten()
-row3 = np.asarray([dump[1,0,1],dump[1,1,1]]).flatten()
-final = np.asarray([row0,row1,row2,row3])
-print(final)
-
 strings = ['Identity', 'PauliX','PauliY','PauliZ']
 paulix = np.array([[0,1],[1,0]],dtype=complex)
 pauliy = np.array([[0,-1j],[1j,0]],dtype=complex)
