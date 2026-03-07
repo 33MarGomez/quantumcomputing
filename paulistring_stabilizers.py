@@ -163,3 +163,16 @@ for n in master_iterator:
       print('CNOT is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     if np.all(final == -1.0 * target):
       print('CNOT is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+    dump = np.einsum('ij,jk->ik',target,hh)
+    final = np.einsum('ij,jk->ik',dump,target)
+    final = final/4
+    if np.all(final == hh/4):
+      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to HH')
+    if np.all(final == -1.0 * hh/4):
+      print(strings[n] + ' otimes ' + strings[y] + ' is a -1 stabilizer to HH')
+    dump = np.einsum('ij,jk->ik',target,cnot)
+    final = np.einsum('ij,jk->ik',dump,target)
+    if np.all(final == cnot):
+      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT')
+    if np.all(final == -1.0 * cnot):
+      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT')
