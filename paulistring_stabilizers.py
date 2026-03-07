@@ -175,16 +175,16 @@ for n in master_iterator:
     if np.all(final == cnot12):
       print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT12')
     if np.all(final == -1.0 * cnot12):
-      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT12')
+      print(strings[n] + ' otimes ' + strings[y] + ' is a -1 stabilizer to CNOT12')
     dump = np.einsum('ij,jk->ik',cnot21,target)
     final = np.einsum('ij,jk->ik',dump,cnot21)
     if np.all(final == target):
       print('CNOT21 is a +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     if np.all(final == -1.0 * target):
-      print('CNOT21 is a +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+      print('CNOT21 is a -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     dump = np.einsum('ij,jk->ik',target,cnot21)
     final = np.einsum('ij,jk->ik',dump,target)
     if np.all(final == cnot21):
       print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT21')
     if np.all(final == -1.0 * cnot21):
-      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT21')
+      print(strings[n] + ' otimes ' + strings[y] + ' is a -1 stabilizer to CNOT21')
