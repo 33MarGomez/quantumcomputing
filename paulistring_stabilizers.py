@@ -160,9 +160,9 @@ for n in master_iterator:
     dump = np.einsum('ij,jk->ik',cnot12,target)
     final = np.einsum('ij,jk->ik',dump,cnot12)
     if np.all(final == target):
-      print('CNOT is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+      print('CNOT12 is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     if np.all(final == -1.0 * target):
-      print('CNOT is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+      print('CNOT12 is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     dump = np.einsum('ij,jk->ik',target,hh)
     final = np.einsum('ij,jk->ik',dump,target)
     if np.all(final == hh): #the sqrt2 **-1 scalar seperates out
@@ -172,6 +172,6 @@ for n in master_iterator:
     dump = np.einsum('ij,jk->ik',target,cnot12)
     final = np.einsum('ij,jk->ik',dump,target)
     if np.all(final == cnot12):
-      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT')
+      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT12')
     if np.all(final == -1.0 * cnot12):
-      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT')
+      print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT12')
