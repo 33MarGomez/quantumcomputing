@@ -3,6 +3,7 @@
 #https://arxiv.org/abs/quant-ph/9807006
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 strings = ['PauliX','PauliY','PauliZ']
 paulix = np.array([[0,1],[1,0]],dtype=complex)
@@ -64,3 +65,71 @@ for i in indexes:
           print(strings[e] + ' otimes ' + strings[t] + ', ' + strings[i] + ' otimes ' + strings[r] + ', +1')
         if np.all(final == -1.0 * target):
           print(strings[e] + ' otimes ' + strings[t] + ', ' + strings[i] + ' otimes ' + strings[r] + ', -1')
+
+paulix = np.array([[0,1],[1,0]],dtype=complex)
+pauliy = np.array([[0,-1j],[1j,0]],dtype=complex)
+pauliz = np.array([[1,0],[0,-1]],dtype=complex)
+identity = np.array([[1,0],[0,1]])
+
+task_list = np.array([pauliz, paulix, pauliy, identity])
+
+master_graph = []
+master_iterator = [0,1,2,3]
+
+for target_x in master_iterator: #this is the outer per-target basis
+  outer_write = [0,1,2,3] #this cycles outer per-transform basis. Row-wise write goes here
+  for transform_x in outer_write:
+    row = []
+    outer_interest = [0,1,2,3] #this cycles over the inner matrix of the target product
+    for target_y in outer_interest:
+      inner_transform = [0,1,2,3] #this cycles over the inner matrix of the transform
+      for transform_y in inner_transform:
+        target = np.einsum('ij,kl->ijkl',task_list[target_x,:],task_list[target_y,:])
+        row0 = np.asarray([target[0,0,0],target[0,1,0]]).flatten()
+        row1 = np.asarray([target[0,0,1],target[0,1,1]]).flatten()
+        row2 = np.asarray([target[1,0,0],target[1,1,0]]).flatten()
+        row3 = np.asarray([target[1,0,1],target[1,1,1]]).flatten()
+        target = np.asarray([row0,row1,row2,row3])
+        transform = np.einsum('ij,kl->ijkl',task_list[transform_x,:],task_list[transform_y,:])
+        row0 = np.asarray([transform[0,0,0],transform[0,1,0]]).flatten()
+        row1 = np.asarray([transform[0,0,1],transform[0,1,1]]).flatten()
+        row2 = np.asarray([transform[1,0,0],transform[1,1,0]]).flatten()
+        row3 = np.asarray([transform[1,0,1],transform[1,1,1]]).flatten()
+        transform = np.asarray([row0,row1,row2,row3])
+        dump = np.einsum('ij,jk->ik',transform,target)
+        final = np.einsum('ij,jk->ik',dump,transform)
+        if np.all(final == target):
+          row.append(1)
+        if np.all(final == -1.0 * target):
+          row.append(-1)
+    master_graph.append(row)
+
+master_graph = np.asarray(master_graph)
+data = master_graph
+labels = ['Z', 'X', 'Y', 'I'] * 4
+
+fig, ax = plt.subplots(figsize=(8, 8))
+im = ax.imshow(data, cmap='RdBu', vmin=-1, vmax=1)
+
+
+ax.set_xticks(range(16), labels=labels)
+ax.set_yticks(range(16), labels=labels)
+outer_pos = [1.5, 5.5, 9.5, 13.5]
+outer_labels = ['Z', 'X', 'Y', 'I']
+ax.xaxis.tick_top()
+
+# Secondary X (Bottom)
+secax_x = ax.secondary_xaxis('top', functions=(lambda x: x, lambda x: x))
+secax_x.set_xticks(outer_pos, labels=outer_labels)
+secax_x.tick_params(axis='x', which='both', length=0, pad=20) # Push labels down
+# Secondary Y (Left)
+secax_y = ax.secondary_yaxis('left', functions=(lambda y: y, lambda y: y))
+secax_y.set_yticks(outer_pos, labels=outer_labels)
+secax_y.tick_params(axis='y', which='both', length=0, pad=25) # Push labels left
+
+ax.set_xlabel("Lower Qubit (Target Operator by/ Similarity Transform)", fontsize=12, labelpad=35)
+ax.xaxis.set_label_position('top')
+ax.set_ylabel("Upper Qubit (Target Operator by/ Similarity Transform)", fontsize=12, labelpad=40)
+
+plt.tight_layout()
+plt.show()
