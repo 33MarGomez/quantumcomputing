@@ -137,7 +137,7 @@ plt.show()
 task_list = np.array([pauliz, paulix, pauliy, identity])
 strings = ['PauliZ', 'PauliX', 'PauliY', 'Identity']
 hh = np.array([[1,1,1,1],[1,-1,1,-1],[1,1,-1,-1],[1,-1,-1,1]])
-cnot = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
+cnot12 = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
 master_iterator = [0,1,2,3]
 
 #HH and CNOT if you're curious
@@ -157,8 +157,8 @@ for n in master_iterator:
       print('HH is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     if np.all(final == -1.0 * target):
       print('HH is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
-    dump = np.einsum('ij,jk->ik',cnot,target)
-    final = np.einsum('ij,jk->ik',dump,cnot)
+    dump = np.einsum('ij,jk->ik',cnot12,target)
+    final = np.einsum('ij,jk->ik',dump,cnot12)
     if np.all(final == target):
       print('CNOT is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     if np.all(final == -1.0 * target):
@@ -169,9 +169,9 @@ for n in master_iterator:
       print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to HH')
     if np.all(final == -1.0 * hh): #the sqrt2 **-1 scalar seperates out
       print(strings[n] + ' otimes ' + strings[y] + ' is a -1 stabilizer to HH')
-    dump = np.einsum('ij,jk->ik',target,cnot)
+    dump = np.einsum('ij,jk->ik',target,cnot12)
     final = np.einsum('ij,jk->ik',dump,target)
-    if np.all(final == cnot):
+    if np.all(final == cnot12):
       print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT')
-    if np.all(final == -1.0 * cnot):
+    if np.all(final == -1.0 * cnot12):
       print(strings[n] + ' otimes ' + strings[y] + ' is a +1 stabilizer to CNOT')
