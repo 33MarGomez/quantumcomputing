@@ -133,3 +133,34 @@ ax.set_ylabel("Upper Qubit (Target Operator by/ Similarity Transform)", fontsize
 
 plt.tight_layout()
 plt.show()
+
+task_list = np.array([pauliz, paulix, pauliy, identity])
+strings = ['PauliZ', 'PauliX', 'PauliY', 'Identity']
+hh = np.array([[1,1,1,1],[1,-1,1,-1],[1,1,-1,-1],[1,-1,-1,1]])
+cnot = np.array([[1,0,0,0],[0,1,0,0],[0,0,0,1],[0,0,1,0]])
+master_iterator = [0,1,2,3]
+
+#HH and CNOT if you're curious
+for n in master_iterator:
+  outer_write = [0,1,2,3]
+  for y in outer_write:
+    target = np.einsum('ij,kl->ijkl',task_list[n,:],task_list[y,:])
+    row0 = np.asarray([target[0,0,0],target[0,1,0]]).flatten()
+    row1 = np.asarray([target[0,0,1],target[0,1,1]]).flatten()
+    row2 = np.asarray([target[1,0,0],target[1,1,0]]).flatten()
+    row3 = np.asarray([target[1,0,1],target[1,1,1]]).flatten()
+    target = np.asarray([row0,row1,row2,row3])
+    dump = np.einsum('ij,jk->ik',hh,target)
+    final = np.einsum('ij,jk->ik',dump,hh)
+    final = final/4
+    if np.all(final == target):
+      print('HH is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+    if np.all(final == -1.0 * target):
+      print('HH is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+    dump = np.einsum('ij,jk->ik',cnot,target)
+    final = np.einsum('ij,jk->ik',dump,cnot)
+    final = final/4
+    if np.all(final == target):
+      print('CNOT is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
+    if np.all(final == -1.0 * target):
+      print('CNOT is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
