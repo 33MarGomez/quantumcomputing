@@ -159,7 +159,6 @@ for n in master_iterator:
       print('HH is -1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     dump = np.einsum('ij,jk->ik',cnot,target)
     final = np.einsum('ij,jk->ik',dump,cnot)
-    final = final/4
     if np.all(final == target):
       print('CNOT is +1 stabilizer to ' + strings[n] + ' otimes ' + strings[y])
     if np.all(final == -1.0 * target):
