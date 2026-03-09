@@ -25,7 +25,8 @@ def arbitrary1qubit_Rot_from_U(unitary):
 
 def ibm2001_nmr_expt():
   '''
-  The IBM 2001 NMR quantum computation paper uploaded to Pennylane. Initialize with wires = 7
+  The IBM 2001 NMR quantum computation paper uploaded to Pennylane. Initialize with wires = 7, desired initial state uses 1 ancilla seeking qubit read-out in,
+  n = 2\lceil log_2 15 \rceil and m = \lceil log_2 15 \rceil. Top to bottom, n is first three |0> qubits, m is last four |0...1> qubits.
   Inputs:
   None
   
@@ -37,7 +38,7 @@ def ibm2001_nmr_expt():
   U2 = np.array([[1,0,0,0],[0,1,0,0],[0,0,np.cos(np.pi/8.0)-np.sin(np.pi/8.0)*1j,0],
                 [0,0,0,np.cos(np.pi/8.0)+np.sin(np.pi/8.0)*1j]],dtype=complex)
 
-
+  qml.PauliX(wires=6)
   qml.Hadamard(wires=0)
   qml.Hadamard(wires=1)
   qml.Hadamard(wires=2)
