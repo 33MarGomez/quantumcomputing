@@ -43,7 +43,7 @@ QiskitRuntimeService.save_account(
 )
 
 #script
-def preset_run_ghz(circuit, backend, shots=1024):
+def preset_run_collect(circuit, backend, shots=1024):
     """
     Runs a quantum circuit on a specified backend and returns the measurement counts.
 
@@ -65,7 +65,7 @@ def preset_run_ghz(circuit, backend, shots=1024):
 
     return result[0].data.meas.get_bitstrings()
 
-def check_props(counts):
+def check_ghz(counts):
     """
     Test function, all GHZ states satisfy expected properties. In this case,
     check only 000 and 111 occured from the simulator
@@ -85,6 +85,33 @@ def check_props(counts):
         )
         return False
 
+def make_csv(counts,experiment_string,trial_string):
+    """
+    Creates a .csv using Pandas to save results. This also prints the full
+    file as a back-up if the runtime is prematurely aborted by mistake, so
+    it make be retrieved at a later time.
+
+    Args
+    counts:list[str] = data.meas.get_bitstrings() return to be processed.
+    experiment_string = name of the phenomenon
+    trial_string = current trial, not to overwrite on your disk
+
+    Returns:
+    None
+
+    Writes:
+    csv_{experiment_string}{trial_string_expt}.csv
+    prints index,bitstring pairs of the experiment
+    """
+    num = range(len(counts))
+    series = pd.Series(result,index=num)
+    series = series.astype(str)
+    series.index.name = "index"
+    series = series.astype(str)
+    series.name = "bitstring"
+    file_name = f"csv_{experiment_string}{trial_string}.csv"
+    series.to_csv(file_name)
+    print(series.to_string())
 
 ghz = QuantumCircuit(3)
 ghz.h(0)
@@ -95,17 +122,12 @@ ghz.measure_all()
 service = QiskitRuntimeService(channel="ibm_quantum_platform")
 service = QiskitRuntimeService()
 backend = AerSimulator()
-counts = preset_run_ghz(ghz, backend, shots=1024)
-good_go = check_props(counts)
+counts = preset_run_collect(ghz, backend, shots=1024)
+good_go = check_ghz(counts)
 if good_go==True:
+    expt_str = 'GHZ'
+    trial_str = '1'
     backend = service.least_busy(operational=True, simulator=False, min_num_qubits=3)
     backend = AerSimulator()
-    result = preset_run_ghz(ghz, backend, shots=1024)
-    num = range(len(counts))
-    series = pd.Series(result,index=num)
-    series = series.astype(str)
-    series.index.name = "index"
-    series = series.astype(str)
-    series.name = "bitstring"
-    series.to_csv("csv_ghz_expt_test.csv") #pick a filename
-    print(series.to_string())
+    result = preset_run_collect(ghz, backend, shots=1024)
+    make_csv(result,expt_str,trial_str)
